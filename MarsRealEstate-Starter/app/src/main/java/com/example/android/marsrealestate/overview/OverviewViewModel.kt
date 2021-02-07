@@ -33,6 +33,11 @@ import retrofit2.Response
  */
 class OverviewViewModel : ViewModel() {
 
+    private val _property = MutableLiveData<MarsProperty>()
+
+    val property: LiveData<MarsProperty>
+        get() = _property
+
     // The internal MutableLiveData String that stores the most recent response
     private val _response = MutableLiveData<String>()
 
@@ -55,6 +60,10 @@ class OverviewViewModel : ViewModel() {
             try {
                 val listResult = MarsApi.retrofitService.getProperties()
                 _response.value = "Success: ${listResult.size} Mars properties retrieved"
+                if (listResult.size > 0) {
+                    _property.value = listResult[0]
+                }
+
             } catch (e: Exception) {
                 _response.value = "Failure: ${e.message}"
             }
